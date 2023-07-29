@@ -1,7 +1,7 @@
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
+  // Route,
   Outlet,
 } from "react-router-dom";
 import Products from "./pages/Products/Products";
@@ -9,6 +9,7 @@ import Product from "./pages/Product/Product";
 import Home from "./pages/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
+import "./App.scss";
 
 const Layout = () => {
   return (

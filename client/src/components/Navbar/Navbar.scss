@@ -1,0 +1,40 @@
+.navbar{
+    height: 80px; //h80   ** h80p --> height:80%
+    // background-color: cyan;
+    .wrapper{
+        padding: 10px 30px ;
+        display: flex;
+        justify-content: space-between; //jb:sb
+        .item{display: flex;
+            align-items: center;} //aic
+
+        .left{display: flex; gap: 25px;}
+        .center{font-size: 30px;}
+        .right{display: flex; gap: 25px;
+        .icons{display: flex;
+                color: #777;
+                cursor: pointer;
+            gap: 15px;
+        .cartIcon{
+            position: relative;
+            span{
+                font-size: 12px;
+                font-weight: 700;
+                width: 20px;height: 20px;
+                border-radius: 50%;
+                background-color: rgb(229, 40, 40);
+                color: white;
+                
+                position: absolute; //parent -->relative
+                right: -10px;
+                top: -10px;
+
+                //to position the text in the center
+                display: flex;justify-content: center;align-items: center;
+
+
+                
+            }
+        }}}
+    }
+}

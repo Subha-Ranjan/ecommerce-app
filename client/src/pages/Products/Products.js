@@ -1,7 +1,8 @@
 import React from "react";
+import "./Products.scss";
 
 function Products() {
-  return <div>ProductsPage</div>;
+  return <div className="products">ProductsPage</div>;
 }
 
 export default Products;
