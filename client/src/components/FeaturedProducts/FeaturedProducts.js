@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./FeaturedProducts.scss";
 import Card from "../Card/Card";
 import axios from "axios";
+import useFetch from "../../hooks/UseFetch";
 function FeaturedProducts({ type }) {
   // const data = [
   //   {
@@ -36,26 +37,35 @@ function FeaturedProducts({ type }) {
   //     price: 12,
   //   },
   // ];
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          process.env.REACT_APP_API_URL + "/products?populate=*",
-          {
-            headers: {
-              Authorization: "Bearer" + process.env.REACT_APP_API_TOKEN,
-            },
-          }
-        );
-        console.log("data", res.data.data);
-        setData(res.data.data);
-      } catch (error) {
-        console.log("Error", error);
-      }
-    };
-    fetchData();
-  }, []);
+
+  //========replaced by useFetch=================================
+  //const [data, setData] = useState([]);≈
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         process.env.REACT_APP_API_URL +
+  //           `/products?populate=*&[filters][type][$eq]=${type}`,
+
+  //         {
+  //           headers: {
+  //             Authorization: "Bearer" + process.env.REACT_APP_API_TOKEN,
+  //           },
+  //         }
+  //       );
+  //       console.log("data", res.data.data);
+  //       setData(res.data.data);
+  //     } catch (error) {
+  //       console.log("Error", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+  //===============================================================
+  const { data, loading, error } = useFetch(
+    `/products?populate=*&[filters][type][$eq]=${type}`
+  );
+
   return (
     <div className="featuredProducts">
       <div className="top">
@@ -69,10 +79,18 @@ function FeaturedProducts({ type }) {
           quos veritatis ea illo!
         </p>
       </div>
-      <div className="bottom">
+      {/* <div className="bottom">
         {data?.map((item) => (
           <Card item={item} key={item.id} />
         ))}
+      </div> */}
+
+      <div className="bottom">
+        {error
+          ? "Something went wrong!"
+          : loading
+          ? "loading"
+          : data?.map((item) => <Card item={item} key={item.id} />)}
       </div>
     </div>
   );
