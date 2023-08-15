@@ -11,6 +11,7 @@ function Product() {
     "https://images.pexels.com/photos/10026491/pexels-photo-10026491.png?auto-compress&cs=tinysrgb&w=1600&lazy=load",
     "https://images.pexels.com/photos/12179283/pexels-photo-12179283.jpeg?auto=compress&cs=tinys rgb&w=1600&lazy=load",
   ];
+
   return (
     <div className="product">
       <div className="left">
