@@ -3,35 +3,60 @@ import "./Product.scss";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BalanceIcon from "@mui/icons-material/Balance";
+import useFetch from "../../hooks/UseFetch";
+import { useParams } from "react-router-dom";
 
 function Product() {
-  const [selectedImg, setSelectedImg] = useState(0);
+  const [selectedImg, setSelectedImg] = useState("img"); //changed from 0 to 'img' to handle object optional chaining instead of an array
   const [quantity, setQuantity] = useState(0);
-  const images = [
-    "https://images.pexels.com/photos/10026491/pexels-photo-10026491.png?auto-compress&cs=tinysrgb&w=1600&lazy=load",
-    "https://images.pexels.com/photos/12179283/pexels-photo-12179283.jpeg?auto=compress&cs=tinys rgb&w=1600&lazy=load",
-  ];
+  // const images = [
 
+  //   "https://images.pexels.com/photos/10026491/pexels-photo-10026491.png?auto-compress&cs=tinysrgb&w=1600&lazy=load",
+  //   "https://images.pexels.com/photos/12179283/pexels-photo-12179283.jpeg?auto=compress&cs=tinys rgb&w=1600&lazy=load",
+  // ];
+
+  //indivisual product data fetch
+  const id = useParams().id;
+  const { data, loading, error } = useFetch(`/products/${id}?populate=*`);
+  console.log(
+    "PrintURL: ",
+    data?.attributes?.sub_categories.data[0].attributes.title
+  );
   return (
     <div className="product">
       <div className="left">
         <div className="images">
-          <img src={images[0]} alt="" onClick={(e) => setSelectedImg(0)} />
-          <img src={images[1]} alt="" onClick={(e) => setSelectedImg(1)} />
+          <img
+            src={
+              process.env.REACT_APP_UPLOAD_URL +
+              data?.attributes?.img?.data?.attributes?.url
+            }
+            alt=""
+            onClick={(e) => setSelectedImg("img")}
+          />
+          <img
+            src={
+              process.env.REACT_APP_UPLOAD_URL +
+              data?.attributes?.img2?.data?.attributes?.url
+            }
+            alt=""
+            onClick={(e) => setSelectedImg("img2")}
+          />
         </div>
         <div className="mainImg">
-          <img src={images[selectedImg]} alt="" srcset="" />
+          <img
+            src={
+              process.env.REACT_APP_UPLOAD_URL +
+              data?.attributes[selectedImg]?.data?.attributes?.url
+            }
+            alt=""
+          />
         </div>
       </div>
       <div className="right">
-        <h1>Organic Desi Cow Ghee</h1>
-        <span>$199</span>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
-          reiciendis laboriosam labore exercitationem, dolore quos praesentium
-          molestiae neque modi, veniam libero voluptatibus iusto commodi ad
-          assumenda pariatur temporibus laborum eius?
-        </p>
+        <h1>{data?.attributes?.title}</h1>
+        <span>${data?.attributes?.price}</span>
+        <p>{data?.attributes?.desc}</p>
         <div className="quantity">
           <button
             onClick={() => setQuantity((prev) => (prev === 0 ? 0 : prev - 1))}
@@ -45,18 +70,23 @@ function Product() {
           <AddShoppingCartIcon />
           Add to Cart
         </button>
-        <div className="link">
+        <div className="links">
           <div className="item">
             <FavoriteBorderIcon />
             Add to wishlist
           </div>
-          <div className="item"></div>
-          <BalanceIcon /> Compare Item
+          <div className="item">
+            <BalanceIcon />
+            Add to compare
+          </div>
         </div>
 
         <div className="info">
-          <span>Vendor: Polo</span>
-          <span>Product Type: T-Shirt</span>
+          <span>Vendor: Dior</span>
+          <span>
+            Product Type:{" "}
+            {data?.attributes?.sub_categories.data[0].attributes.title}
+          </span>
           <span>Tag: T-Shirt, Women, Top</span>
         </div>
         <div className="details">
