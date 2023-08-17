@@ -5,6 +5,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BalanceIcon from "@mui/icons-material/Balance";
 import useFetch from "../../hooks/UseFetch";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/cartReducer";
 
 function Product() {
   const [selectedImg, setSelectedImg] = useState("img"); //changed from 0 to 'img' to handle object optional chaining instead of an array
@@ -16,7 +18,9 @@ function Product() {
   // ];
 
   //indivisual product data fetch
+
   const id = useParams().id;
+  const dispatch = useDispatch();
   const { data, loading, error } = useFetch(`/products/${id}?populate=*`);
   console.log(
     "PrintURL: ",
@@ -66,7 +70,21 @@ function Product() {
           {quantity}
           <button onClick={() => setQuantity((prev) => prev + 1)}>+</button>
         </div>
-        <button className="add">
+        <button
+          className="add"
+          onClick={() =>
+            dispatch(
+              addToCart({
+                id: data.id,
+                title: data.attributes.title,
+                desc: data.attributes.desc,
+                price: data.attributes.price,
+                img: data.attributes.img.data.attributes.url,
+                quantity,
+              })
+            )
+          }
+        >
           <AddShoppingCartIcon />
           Add to Cart
         </button>
