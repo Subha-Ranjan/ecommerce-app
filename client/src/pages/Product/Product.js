@@ -10,7 +10,7 @@ import { addToCart } from "../../redux/cartReducer";
 
 function Product() {
   const [selectedImg, setSelectedImg] = useState("img"); //changed from 0 to 'img' to handle object optional chaining instead of an array
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   // const images = [
 
   //   "https://images.pexels.com/photos/10026491/pexels-photo-10026491.png?auto-compress&cs=tinysrgb&w=1600&lazy=load",
