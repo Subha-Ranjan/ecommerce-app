@@ -22,10 +22,10 @@ function Product() {
   const id = useParams().id;
   const dispatch = useDispatch();
   const { data, loading, error } = useFetch(`/products/${id}?populate=*`);
-  console.log(
-    "PrintURL: ",
-    data?.attributes?.sub_categories.data[0].attributes.title
-  );
+  // console.log(
+  //   "PrintURL: ",
+  //   data?.attributes?.sub_categories.data[0].attributes.title
+  // );
   return (
     <div className="product">
       <div className="left">
@@ -59,7 +59,7 @@ function Product() {
       </div>
       <div className="right">
         <h1>{data?.attributes?.title}</h1>
-        <span>${data?.attributes?.price}</span>
+        <span>₹{data?.attributes?.price}</span>
         <p>{data?.attributes?.desc}</p>
         <div className="quantity">
           <button
@@ -103,7 +103,7 @@ function Product() {
           <span>Vendor: Dior</span>
           <span>
             Product Type:{" "}
-            {data?.attributes?.sub_categories.data[0].attributes.title}
+            {/* {data?.attributes?.sub_categories?.data[0].attributes.title} */}
           </span>
           <span>Tag: T-Shirt, Women, Top</span>
         </div>

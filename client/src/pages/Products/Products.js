@@ -7,7 +7,7 @@ import "./Products.scss";
 
 const Products = () => {
   const catId = parseInt(useParams().id);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(2000);
   const [sort, setSort] = useState("asc"); //not null - otherwise "Products" page wont load properly
   const [selectedSubCats, setSelectedSubCats] = useState([]);
 

@@ -1,32 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import "./Cart.scss";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { useSelector } from "react-redux";
 import { removeItem, resetCart } from "../../redux/cartReducer";
+import { useDispatch } from "react-redux";
+import { makeRequest } from "../../MakeRequest";
+import { loadStripe } from "@stripe/stripe-js";
 
-function Cart() {
-  // const data = [
-  //   {
-  //     id: 1,
-  //     img: "https://images.pexels.com/photos/1163194/pexels-photo-1163194.jpeg?auto-compress&cs=tinys rgb&w=1600",
-  //     img2: "https://images.pexels.com/photos/1972115/pexels-photo-1972115.jpeg?auto-compress&cs=tinysrgb&w=1600",
-  //     title: "Long Sleeve Graphic T-shirt",
-  //     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error, molestias veniam. Officiis minima, distinctio tenetur quo magni aspernatur. Doloribus recusandae rem, itaque ut facilis labore repudiandae exercitationem laboriosam neque dolorum",
-  //     isNew: true,
-  //     oldPrice: 19,
-  //     price: 12,
-  //   },
-  //   {
-  //     id: 2,
-  //     img: "https://images.pexels.com/photos/1759622/pexels-photo-1759622.jpeg?auto=compress&cs=tinys rgb&w=1600",
-  //     title: "Coat",
-  //     isNew: true,
-  //     oldPrice: 19,
-  //     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error, molestias veniam. Officiis minima, distinctio tenetur quo magni aspernatur. Doloribus recusandae rem, itaque ut facilis labore repudiandae exercitationem laboriosam neque dolorum",
-
-  //     price: 12,
-  //   },
-  // ];
-
+const Cart = () => {
   const products = useSelector((state) => state.cart.products);
   const dispatch = useDispatch();
 
@@ -38,6 +19,22 @@ function Cart() {
     return total.toFixed(2);
   };
 
+  const stripePromise = loadStripe(
+    "pk_test_51Nh9PLSJUQ02Abvj08shOXc8EhmdfFOUurIlvdrjda4i0PZFdWOJ7wDqArdKkshfP1jppv4B39mbuGwuHhg2pw9D00bkjn7fNa"
+  );
+  const handlePayment = async () => {
+    try {
+      const stripe = await stripePromise;
+      const res = await makeRequest.post("/orders", {
+        products,
+      });
+      await stripe.redirectToCheckout({
+        sessionId: res.data.stripeSession.id,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="cart">
       <h1>Products in your cart</h1>
@@ -46,12 +43,12 @@ function Cart() {
           <img src={process.env.REACT_APP_UPLOAD_URL + item.img} alt="" />
           <div className="details">
             <h1>{item.title}</h1>
-            <p>{item.desc?.substring(0, 35)}</p>
+            <p>{item.desc?.substring(0, 100)}</p>
             <div className="price">
               {item.quantity} x ₹{item.price}
             </div>
           </div>
-          <DeleteOutlineOutlinedIcon
+          <DeleteOutlinedIcon
             className="delete"
             onClick={() => dispatch(removeItem(item.id))}
           />
@@ -61,12 +58,12 @@ function Cart() {
         <span>SUBTOTAL</span>
         <span>₹ {totalPrice()}</span>
       </div>
-      <button>PROCEED TO CHECKOUT</button>
+      <button onClick={handlePayment}>PROCEED TO CHECKOUT</button>
       <span className="reset" onClick={() => dispatch(resetCart())}>
         Reset Cart
       </span>
     </div>
   );
-}
+};
 
 export default Cart;
